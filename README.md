@@ -8,6 +8,8 @@ An introduction to self-driving cars with JavaScript Frontend and Python Backend
 - ...
 
 ## Collaboration
+
+Move to desired project folder and clone the repo:
 ```bash
 cd to project folder
 git clone https://github.com/g-noth/intro-self-driving-cars.git
@@ -26,4 +28,4 @@ git commit -m "Description of changes"
 git push origin feature/new-feature-name
 ```
 
-Open pull request 
+Next, open a pull request.
