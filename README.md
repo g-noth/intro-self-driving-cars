@@ -1,7 +1,13 @@
 # intro-self-driving-cars
+
 An introduction to self-driving cars with JavaScript Frontend and Python Backend
 
+## Getting Started
 
+- Install dependencies
+- ...
+
+## Collaboration
 ```bash
 cd to project folder
 git clone https://github.com/g-noth/intro-self-driving-cars.git
