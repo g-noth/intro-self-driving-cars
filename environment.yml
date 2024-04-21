@@ -1,0 +1,8 @@
+name: self-driving-cars-venv
+channels:
+  - defaults
+dependencies:
+- numpy
+- matplotlib
+- pandas
+- pytorch
