@@ -1,5 +1,5 @@
 class Car {
-    constructor(x, y, width, height){
+    constructor(x, y, width, height, carType, maxSpeed = 3){
         this.x = x; //center of the car x
         this.y = y; //center of the car y
         this.width = width;
@@ -7,30 +7,39 @@ class Car {
 
         this.speed=0;
         this.acceleration=0.2;
-        this.maxSpeed=3;
+        this.maxSpeed = maxSpeed;
         this.friction=0.05;
         this.angle=0;
         this.damaged=false;
 
-        this.sensor = new Sensor(this);
-        this.controls = new Controls();
+        if(carType=="MAIN"){
+            this.sensor = new Sensor(this);
+        }
+        this.controls = new Controls(carType);
     }
 
-    update(roadBorders){
+    update(roadBorders, traffic){
         if(!this.damaged){
             this.#drive();
             this.polygon = this.#createPolygon();
-            this.damaged = this.#assessDamage(roadBorders);
+            this.damaged = this.#assessDamage(roadBorders, traffic);
         }
-        this.sensor.update(roadBorders);
+        this.sensor?.update(roadBorders, traffic);
     }
 
-    #assessDamage(roadBorders){
+    #assessDamage(roadBorders, traffic){
         for(let i=0; i<roadBorders.length; i++){
             if(polysIntersect(this.polygon, roadBorders[i])){
                 return true;
             }
         }
+
+        for(let i=0; i<traffic.length; i++){
+            if(polysIntersect(this.polygon, traffic[i].polygon)){
+                return true;
+            }
+        }
+
         return false;
     }
 
@@ -113,12 +122,12 @@ class Car {
         this.y -= Math.cos(this.angle) * this.speed;
     };
 
-    draw(ctx) {
+    draw(ctx, color) {
         //color code car while driving
         if(this.damaged){
             ctx.fillStyle="gray";
         }else{
-            ctx.fillStyle="black";
+            ctx.fillStyle=color;
         }
 
         // draw car
@@ -129,6 +138,6 @@ class Car {
         }
         ctx.fill();
 
-        this.sensor.draw(ctx);
+        this.sensor?.draw(ctx);
     }
 }
