@@ -6,21 +6,22 @@ class Sensor{
         this.raySpread=Math.PI/4;
 
         this.rays=[];
-        this.closeToBorders=[];
+        this.readings=[];
     }
 
     update(roadBorders){
         this.#castRays();
-        this.closeToBorders= [];
+        this.readings= [];  // consists of x,y,offset
 
         for (let i=0; i <this.rays.length; i++){
-            this.closeToBorders.push(
-                this.#getCloseToBorder(this.rays[i], roadBorders)
+            this.readings.push(
+                this.#getReading(this.rays[i], roadBorders)
             );
         }
     }
 
-    #getCloseToBorder(ray, roadBorders){
+    #getReading(ray, roadBorders){
+        // get minimal offset intersection as reading
         let touches = [];
 
         for(let i=0; i < roadBorders.length; i++){
@@ -67,12 +68,26 @@ class Sensor{
     }
 
     draw(ctx){
-        this.rays.forEach((ray)=>{
+        this.rays.forEach((ray, i)=>{
+            let rayEnd = ray[1];
+            if (this.readings[i]){
+                rayEnd = this.readings[i]
+            }
+
+            // line touching border
             ctx.beginPath();
             ctx.lineWidth=2;
             ctx.strokeStyle="yellow";
             ctx.moveTo(ray[0].x, ray[0].y)
-            ctx.lineTo(ray[1].x, ray[1].y)
+            ctx.lineTo(rayEnd.x, rayEnd.y)
+            ctx.stroke();
+
+            // actual line 
+            ctx.beginPath();
+            ctx.lineWidth=2;
+            ctx.strokeStyle="black";
+            ctx.moveTo(ray[1].x, ray[1].y)
+            ctx.lineTo(rayEnd.x, rayEnd.y)
             ctx.stroke();
         })
     }
