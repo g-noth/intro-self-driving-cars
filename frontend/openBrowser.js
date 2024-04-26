@@ -1,3 +1,3 @@
 import('open').then((open)=>{
-    open.default('index.html');
+    open.default('./code/index.html');
 });
