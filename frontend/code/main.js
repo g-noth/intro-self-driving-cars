@@ -1,5 +1,7 @@
 const canvas = document.getElementById('myCanvas');
 canvas.width = 200;
+let isStopped = false;
+let animationFrame;
 
 const networkCanvas = document.getElementById('networkCanvas');
 networkCanvas.width = 400;
@@ -50,10 +52,20 @@ function discard(){
 }
 
 function stop(){
-  window.cancelAnimationFrame(animationFrameId);
+  isStopped = !isStopped;
+  const button = document.getElementById("stopButton")
+  button.innerHTML = isStopped ? "⏯️" : "⏹️" ;
+
+  if (isStopped){
+    window.cancelAnimationFrame(animationFrame);
+  }else{
+    animate();
+  }
 }
 
-
+function reload(){
+  window.location.reload();
+}
 
 function generateCars(N){
    const cars = [];
@@ -64,6 +76,10 @@ function generateCars(N){
 }
 
 function animate(time) {
+  if(isStopped){
+    return;
+  }
+
   for(let i=0;i<traffic.length;i++){
     traffic[i].update(road.borders, []);
   }
@@ -78,13 +94,12 @@ function animate(time) {
       ...cars.map(c=>c.y)
     ));
 
+  const heightTabs = document.querySelector(".tab").clientHeight;
   canvas.height = window.innerHeight;
-  networkCanvas.height = window.innerHeight;
+  networkCanvas.height = window.innerHeight - heightTabs;
 
-  // make street move
   ctx.save();
   ctx.translate(0, -bestCar.y + canvas.height * 0.7);
-  // end make street move
 
   road.draw(ctx);
 
@@ -105,5 +120,5 @@ function animate(time) {
   ctx.restore();
   networkCtx.lineDashOffset=-time/30;
   Visualizer.drawNetwork(networkCtx, bestCar.nn);
-  requestAnimationFrame(animate);
+  animationFrame = requestAnimationFrame(animate);
 }
