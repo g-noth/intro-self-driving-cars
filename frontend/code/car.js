@@ -12,8 +12,14 @@ class Car {
         this.angle=0;
         this.damaged=false;
 
-        if(carType=="MAIN"){
+        this.useNN = carType == 'AI';
+
+        if(carType!="MAIN"){
             this.sensor = new Sensor(this);
+            // connect NN to car
+            this.nn = new NeuralNetwork(
+                [this.sensor.rayCount,6,4]
+            );
         }
         this.controls = new Controls(carType);
     }
@@ -24,7 +30,23 @@ class Car {
             this.polygon = this.#createPolygon();
             this.damaged = this.#assessDamage(roadBorders, traffic);
         }
-        this.sensor?.update(roadBorders, traffic);
+        if(this.sensor){
+            this.sensor.update(roadBorders, traffic);
+            // console.log(this.sensor.readings);
+            // low values for far away objects, high values for close objects
+            const offsets = this.sensor.readings.map(
+                sensor_reading => sensor_reading == null?0:1-sensor_reading.offset
+            );
+            const outputs = NeuralNetwork.feedForward(offsets, this.nn);
+            console.log(outputs);
+            // connect NN to controls
+            if(this.useNN){
+                this.controls.forward = outputs[0];
+                this.controls.left = outputs[1];
+                this.controls.right = outputs[2];
+                this.controls.reverse = outputs[3];
+            }
+        }
     }
 
     #assessDamage(roadBorders, traffic){
@@ -122,7 +144,7 @@ class Car {
         this.y -= Math.cos(this.angle) * this.speed;
     };
 
-    draw(ctx, color) {
+    draw(ctx, color, drawSensor=false) {
         //color code car while driving
         if(this.damaged){
             ctx.fillStyle="gray";
@@ -138,6 +160,8 @@ class Car {
         }
         ctx.fill();
 
-        this.sensor?.draw(ctx);
+        if(this.sensor && drawSensor){
+            this.sensor.draw(ctx);
+        }
     }
 }
