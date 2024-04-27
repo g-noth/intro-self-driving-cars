@@ -61,7 +61,7 @@ class Sensor{
             // offset is distance to intersection
             const offsets = touches.map(e => e.offset);
             const minOffset = Math.min(...offsets);
-            return touches.find(e => e.offset = minOffset);
+            return touches.find(e => e.offset === minOffset);
         }
     }
 
