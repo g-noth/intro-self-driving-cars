@@ -90,8 +90,9 @@ function animate(time) {
       ...cars.map(c=>c.y)
     ));
 
+  const heightTabs = document.querySelector(".tab").clientHeight;
   canvas.height = window.innerHeight;
-  networkCanvas.height = window.innerHeight;
+  networkCanvas.height = window.innerHeight - heightTabs;
 
   ctx.save();
   ctx.translate(0, -bestCar.y + canvas.height * 0.7);

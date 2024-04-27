@@ -5,7 +5,14 @@
     </head>
     <body>
         <canvas id="myCanvas"></canvas>
-        <canvas id ="networkCanvas"></canvas>
+        <div class="networkTabs">
+            <div class="tab">
+                <button class="nn1">NN1</button>
+                <button class="nn2">NN2</button>
+                <button class="nn3">NN3</button>
+            </div>
+            <canvas id ="networkCanvas"></canvas>
+        </div>
         <div id = "verticalButtons">
             <button title="Save Neural Network" onclick = "save()">📥</button>
             <button title="Discard Neural Network" onclick = "discard()">🗑️</button>
