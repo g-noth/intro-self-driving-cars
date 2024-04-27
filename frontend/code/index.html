@@ -7,9 +7,11 @@
         <canvas id="myCanvas"></canvas>
         <canvas id ="networkCanvas"></canvas>
         <div id = "verticalButtons">
-            <button onclick = "save()">📥</button>
-            <button onclick = "discard()">🗑️</button>
-            <button onclick = "stop()">⏹️</button>
+            <button title="Save Neural Network" onclick = "save()">📥</button>
+            <button title="Discard Neural Network" onclick = "discard()">🗑️</button>
+            <button title="Stop/Resume Neural Network" id="stopButton" onclick = "stop()">
+                ⏹️
+            </button>
         </div>
         <script src="../../backend/network.js"></script>
         <script src="visualizer.js"></script>
