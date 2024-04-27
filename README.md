@@ -5,7 +5,10 @@ An introduction to self-driving cars with JavaScript Frontend and Python Backend
 ## Getting Started
 
 - Install dependencies
-- ...
+- Recommended: Install VS Code extension "Live Server" for visualization 
+
+Right-click index.html and choose "Open with Live Server"
+
 
 ## Collaboration
 
