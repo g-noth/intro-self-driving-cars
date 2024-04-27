@@ -15,7 +15,7 @@ const networkCtx = networkCanvas.getContext('2d');
 const road = new Road(canvas.width / 2, canvas.width * 0.9, laneCount);
 
 
-const N = 50;
+const N = 400;
 const cars = generateCars(N);  
 
 let bestCar = cars[0];
@@ -58,7 +58,7 @@ function stop(){
 function generateCars(N){
    const cars = [];
    for(let i=1;i<N;i++){
-      cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, 'AI'));
+      cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, 'AI',3,true));
    }
    return cars;
 }

@@ -1,5 +1,7 @@
+const axios = require('axios');
+
 class Car {
-    constructor(x, y, width, height, carType, maxSpeed = 3){
+    constructor(x, y, width, height, carType, maxSpeed = 3, usePythonNN = false){
         this.x = x; //center of the car x
         this.y = y; //center of the car y
         this.width = width;
@@ -12,19 +14,22 @@ class Car {
         this.angle=0;
         this.damaged=false;
 
-        this.useNN = carType == 'AI';
+        this.usePythonNN = usePythonNN;
 
-        if(carType=="AI"){
+        this.useJSNN = carType == 'AI' && !usePythonNN;
+
+        if(carType=="AI" && !usePythonNN){
             this.sensor = new Sensor(this);
             // connect NN to car
             this.nn = new NeuralNetwork(
                 [this.sensor.rayCount,6,4]
             );
         }
+
         this.controls = new Controls(carType);
     }
 
-    update(roadBorders, traffic){
+    async update(roadBorders, traffic){
         if(!this.damaged){
             this.#drive();
             this.polygon = this.#createPolygon();
@@ -37,10 +42,20 @@ class Car {
             const offsets = this.sensor.readings.map(
                 sensor_reading => sensor_reading == null?0:1-sensor_reading.offset
             );
-            const outputs = NeuralNetwork.feedForward(offsets, this.nn);
+
+            let outputs;
+            if(this.usePythonNN){
+                const response = await axios.post('/api/postSensorData',{
+                    input_array: offsets
+                });
+                outputs = response.data;
+            } else {
+                // use JS NN
+                outputs = NeuralNetwork.feedForward(offsets, this.nn);
+            }
             // console.log(outputs);
             // connect NN to controls
-            if(this.useNN){
+            if(this.useJSNN || this.usePythonNN){
                 this.controls.forward = outputs[0];
                 this.controls.left = outputs[1];
                 this.controls.right = outputs[2];
