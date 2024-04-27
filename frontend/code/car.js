@@ -14,7 +14,7 @@ class Car {
 
         this.useNN = carType == 'AI';
 
-        if(carType!="MAIN"){
+        if(carType=="AI"){
             this.sensor = new Sensor(this);
             // connect NN to car
             this.nn = new NeuralNetwork(
@@ -38,7 +38,7 @@ class Car {
                 sensor_reading => sensor_reading == null?0:1-sensor_reading.offset
             );
             const outputs = NeuralNetwork.feedForward(offsets, this.nn);
-            console.log(outputs);
+            // console.log(outputs);
             // connect NN to controls
             if(this.useNN){
                 this.controls.forward = outputs[0];
