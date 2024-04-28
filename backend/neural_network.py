@@ -1,12 +1,15 @@
 import flask
-from flask import request, jsonify
+from flask import request, jsonify, Flask
+from flask_cors import CORS
 import numpy as np
+import logging
 
 
 
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
+CORS(app, origins=['http://localhost:3000', 'http://localhost:5000'])
 
 # input data: readings from the sensors/rays (Post request from the frontend)
 
@@ -23,20 +26,6 @@ app.config["DEBUG"] = True
 # outputs[2] = right
 # outputs[3] = reverse
 
-
-# expose the neural network model as an API endpoint to feed in the sensor data
-
-@app.route('/api/postSensorData', methods=['POST'])
-def postSensorData():
-    given_inputs = request.json['input_array']
-    given_inputs = np.array(given_inputs)
-    outputs = py_nn.feed_forward(given_inputs)
-    return jsonify(outputs.tolist())
-
-# run flask
-# http://localhost:5000/api/postSensorData
-if __name__ == '__main__':
-    app.run()
 
 
 # feed forward with binary step activation function
@@ -87,8 +76,20 @@ class PyNeuralNetwork:
                 for j in range(len(level.weights[i])):
                     level.weights[i][j] = self.lerp(level.weights[i][j], np.random.rand(-1,1), amount)
                 
-                
-# create a neural network model given input length
-py_nn = PyNeuralNetwork(7,6,4)
 
+# expose the neural network model as an API endpoint to feed in the sensor data
 
+@app.route('/api/postSensorData', methods=['POST'])
+def postSensorData():
+    given_inputs = request.json['input_array']
+    logging.info("Received inputs: " + str(given_inputs))
+    given_inputs = np.array(given_inputs)
+    py_nn = PyNeuralNetwork(len(given_inputs), 6, 4)
+    outputs = py_nn.feed_forward(given_inputs)
+    return jsonify(outputs.tolist())
+
+# run flask
+# http://localhost:5000/api/postSensorData
+if __name__ == '__main__':
+    logging.basicConfig(filename='neural_network.log', level=logging.DEBUG)
+    app.run()

@@ -1,4 +1,3 @@
-import axios from 'axios';
 
 class Car {
     constructor(x, y, width, height, carType, maxSpeed = 3, usePythonNN = false){
@@ -44,18 +43,24 @@ class Car {
             const offsets = this.sensor.readings.map(
                 sensor_reading => sensor_reading == null?0:1-sensor_reading.offset
             );
-
+            console.log(offsets);
+            // connect sensor data to NN
+            // post sensor data to flask server and get NN output (controls)
             let outputs;
+
             if(this.usePythonNN){
                 const response = await axios.post('/api/postSensorData',{
+                    // e.g. [0.1, 0.2, 0.3, 0.4, 0.5]
                     input_array: offsets
-                });
+                }).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
                 outputs = response.data;
+                // log outputs
+                console.log(outputs);
             } else {
                 // use JS NN
                 outputs = NeuralNetwork.feedForward(offsets, this.nn);
             }
-            // console.log(outputs);
+
             // connect NN to controls
             if(this.carType != 'TRAFFIC'){
                 this.controls.forward = outputs[0];
