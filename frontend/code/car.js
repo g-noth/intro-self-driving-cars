@@ -1,4 +1,4 @@
-const axios = require('axios');
+import axios from 'axios';
 
 class Car {
     constructor(x, y, width, height, carType, maxSpeed = 3, usePythonNN = false){
@@ -18,12 +18,14 @@ class Car {
 
         this.useJSNN = carType == 'AI' && !usePythonNN;
 
-        if(carType=="AI" && !usePythonNN){
+        if(this.carType != 'TRAFFIC'){
             this.sensor = new Sensor(this);
             // connect NN to car
-            this.nn = new NeuralNetwork(
-                [this.sensor.rayCount,6,4]
-            );
+            if(this.useJSNN){
+                this.nn = new NeuralNetwork(
+                    [this.sensor.rayCount,6,4]
+                );
+            }
         }
 
         this.controls = new Controls(carType);
@@ -55,7 +57,7 @@ class Car {
             }
             // console.log(outputs);
             // connect NN to controls
-            if(this.useJSNN || this.usePythonNN){
+            if(this.carType != 'TRAFFIC'){
                 this.controls.forward = outputs[0];
                 this.controls.left = outputs[1];
                 this.controls.right = outputs[2];
