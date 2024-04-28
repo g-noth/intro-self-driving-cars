@@ -46,11 +46,13 @@ class Level:
         self.outputs = np.where(sum > self.biases, 1, 0) # binary step activation function (TODO: change to sigmoid function)
         return self.outputs
     
-    
-    # def back_propagate(self, expected_outputs):
-    #     error = expected_outputs - self.outputs
-    #     self.weights += np.dot(self.inputs, error)
-    #     self.biases += error
+    # def back_propogate(self, output_error, learning_rate):
+    #     input_error = np.dot(output_error, self.weights.T)
+    #     weights_error = np.dot(self.inputs.T, output_error)
+    #     # update weights and biases
+    #     self.weights -= learning_rate * weights_error
+    #     self.biases -= learning_rate * output_error
+    #     return input_error
     
     
 class PyNeuralNetwork:
@@ -75,6 +77,11 @@ class PyNeuralNetwork:
             for i in range(len(level.weights[i])):
                 for j in range(len(level.weights[i])):
                     level.weights[i][j] = self.lerp(level.weights[i][j], np.random.rand(-1,1), amount)
+                    
+    # def back_propogate(self, expected_output, learning_rate):
+    #     output_error = expected_output - self.levels[-1].outputs
+    #     for level in reversed(self.levels):
+    #         output_error = level.back_propogate(output_error, learning_rate)
                 
 
 # expose the neural network model as an API endpoint to feed in the sensor data

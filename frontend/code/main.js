@@ -14,12 +14,14 @@ const networkCtx = networkCanvas.getContext('2d');
 
 const road = new Road(canvas.width / 2, canvas.width * 0.9, laneCount);
 
-
-const N = 10;
+// generate AI cars (either useJSNN or usePythonNN)
+const N = 2;
 const cars = generateCars(N);  
 
+// initialize best car as first car of cohort
 let bestCar = cars[0];
 
+// save best car to mutuate it later on (kind of learning) -- only for JSNN
 if(localStorage.getItem("bestBrain")){
   for(let i=0;i<cars.length;i++){
     cars[i].nn = JSON.parse(localStorage.getItem("bestBrain"));
@@ -54,23 +56,28 @@ function stop(){
 }
 
 
+// generate cohort of AI cars with randomized weights and biases
 
 function generateCars(N){
    const cars = [];
    for(let i=1;i<N;i++){
-      cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, 'AI',3, true)); // set to true for python 
+      cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, 'AI',3, usePythonNN = true)); // set to true for python 
    }
    return cars;
 }
 
+// visualize AI cars and traffic
+
 function animate(time) {
+  // animate traffic
   for(let i=0;i<traffic.length;i++){
     traffic[i].update(road.borders, []);
   }
-
+  // animate AI cars
   for(let i=0;i<cars.length;i++){
     cars[i].update(road.borders, traffic);
   }
+
   // track best car (fitness function: highest up on screen (lowest y value))
   // only works for straight roads
   bestCar = cars.find(
@@ -81,29 +88,34 @@ function animate(time) {
   canvas.height = window.innerHeight;
   networkCanvas.height = window.innerHeight;
 
-  // make street move
+  // make street move and follow best car 
   ctx.save();
   ctx.translate(0, -bestCar.y + canvas.height * 0.7);
   // end make street move
 
   road.draw(ctx);
 
+  // bot cars (traffic)
   for(let i=0;i<traffic.length;i++){
     traffic[i].draw(ctx, 'red');
   }
 
+  // all AI cars semi-transparent
   ctx.globalAlpha = 0.2;
 
   for(let i=0;i<cars.length;i++){
     cars[i].draw(ctx, 'blue');
   }
   
+  // best car fully blue
   ctx.globalAlpha = 1;
-  // focus on main car with sensor
+  // focus on main car with sensor (true = draw sensor)
   bestCar.draw(ctx,"blue",true);
 
   ctx.restore();
   networkCtx.lineDashOffset=-time/30;
+
+  // print neural network of best cars AI / brain
   Visualizer.drawNetwork(networkCtx, bestCar.nn);
   requestAnimationFrame(animate);
 }

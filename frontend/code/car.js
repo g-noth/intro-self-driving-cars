@@ -30,6 +30,7 @@ class Car {
         this.controls = new Controls(carType);
     }
 
+
     async update(roadBorders, traffic){
         if(!this.damaged){
             this.#drive();
@@ -38,36 +39,47 @@ class Car {
         }
         if(this.sensor){
             this.sensor.update(roadBorders, traffic);
-            // console.log(this.sensor.readings);
+
+            // get sensor readings 
             // low values for far away objects, high values for close objects
-            const offsets = this.sensor.readings.map(
-                sensor_reading => sensor_reading == null?0:1-sensor_reading.offset
-            );
-            console.log(offsets);
+            const offsets = this.processSensorReadings(this.sensor.readings);
+            // console.log(offsets);
+
+
             // connect sensor data to NN
             // post sensor data to flask server and get NN output (controls)
             let outputs;
-
             if(this.usePythonNN){
-                const response = await axios.post('http://localhost:5001/api/postSensorData',{
-                    input_array: offsets    // e.g. [0.1, 0.2, 0.3, 0.4, 0.5]
-                });
-                outputs = response.data;
-                // log outputs
-                console.log(outputs);
+                outputs = await this.getPythonNNOutputs(offsets);
+                setTimeout(() =>this.update(roadBorders, traffic), 1000/10);
             } else {
-                // use JS NN
-                outputs = NeuralNetwork.feedForward(offsets, this.nn);
+                outputs = this.getJSNNOutputs(offsets);
             }
-
+            // log outputs
+            console.log(outputs);
             // connect NN to controls
             if(this.carType != 'TRAFFIC'){
                 this.controls.forward = outputs[0];
                 this.controls.left = outputs[1];
                 this.controls.right = outputs[2];
                 this.controls.reverse = outputs[3];
-            }
+             }
         }
+    }
+    // helper function to process sensor readings in either case
+    processSensorReadings(readings){
+        return readings.map(
+            sensor_reading => sensor_reading == null?0:1-sensor_reading.offset
+        );
+    }
+    async getPythonNNOutputs(offsets){
+        const response = await axios.post('http://localhost:5001/api/postSensorData',{
+            input_array: offsets
+        });
+        return response.data;
+    }
+    getJSNNOutputs(offsets){
+        return NeuralNetwork.feedForward(offsets, this.nn);
     }
 
     #assessDamage(roadBorders, traffic){
