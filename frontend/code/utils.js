@@ -39,13 +39,12 @@ function polysIntersect(poly1, poly2) {
   return false;
 }
 
-
-function getRGBA(value){
+function getRGBA(value) {
   // color and strength of connection by weight
   const alpha = Math.abs(value); // -1 to 1, transparency by weight value
   // yellow postive, blue negative
-  const R = value<0?0:255;
+  const R = value < 0 ? 0 : 255;
   const G = R; // red and green make yellow
-  const B = value>0?0:255;
-  return "rgba("+R+","+G+","+B+","+alpha+")";
+  const B = value > 0 ? 0 : 255;
+  return `rgba(${R},${G},${B},${alpha})`;
 }
