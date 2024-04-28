@@ -49,10 +49,9 @@ class Car {
             let outputs;
 
             if(this.usePythonNN){
-                const response = await axios.post('/api/postSensorData',{
-                    // e.g. [0.1, 0.2, 0.3, 0.4, 0.5]
-                    input_array: offsets
-                }).then((response) => {console.log(response)}).catch((error) => {console.log(error)});
+                const response = await axios.post('http://localhost:5001/api/postSensorData',{
+                    input_array: offsets    // e.g. [0.1, 0.2, 0.3, 0.4, 0.5]
+                });
                 outputs = response.data;
                 // log outputs
                 console.log(outputs);

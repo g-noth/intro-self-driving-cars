@@ -105,5 +105,5 @@ function animate(time) {
   ctx.restore();
   networkCtx.lineDashOffset=-time/30;
   Visualizer.drawNetwork(networkCtx, bestCar.nn);
-  // requestAnimationFrame(animate);
+  requestAnimationFrame(animate);
 }

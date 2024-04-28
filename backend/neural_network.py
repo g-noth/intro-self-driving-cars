@@ -9,7 +9,7 @@ import logging
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-CORS(app, origins=['http://localhost:3000', 'http://localhost:5000'])
+CORS(app)
 
 # input data: readings from the sensors/rays (Post request from the frontend)
 
@@ -88,8 +88,12 @@ def postSensorData():
     outputs = py_nn.feed_forward(given_inputs)
     return jsonify(outputs.tolist())
 
+@app.route('/api/health', methods=['GET'])
+def healthCheck():
+    return "ok"
+
 # run flask
-# http://localhost:5000/api/postSensorData
+# http://localhost:5001/api/postSensorData
 if __name__ == '__main__':
     logging.basicConfig(filename='neural_network.log', level=logging.DEBUG)
-    app.run()
+    app.run(port=5001)
