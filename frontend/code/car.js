@@ -22,7 +22,7 @@ class Car {
             // connect NN to car
             if(this.useJSNN){
                 this.nn = new NeuralNetwork(
-                    [this.sensor.rayCount,6,4]
+                    [this.sensor.rayCount,8,4]
                 );
             }
         }
@@ -45,25 +45,31 @@ class Car {
             const offsets = this.processSensorReadings(this.sensor.readings);
             // console.log(offsets);
 
-
             // connect sensor data to NN
             // post sensor data to flask server and get NN output (controls)
             let outputs;
             if(this.usePythonNN){
                 outputs = await this.getPythonNNOutputs(offsets);
+                if(this.carType != 'TRAFFIC'){
+                    this.controls.forward = outputs[0];
+                    this.controls.left = outputs[1];
+                    this.controls.right = outputs[2];
+                    this.controls.reverse = outputs[3];
+                    console.log("Controls",this.controls);
+                 }
                 setTimeout(() =>this.update(roadBorders, traffic), 1000/10);
             } else {
                 outputs = this.getJSNNOutputs(offsets);
+                // log outputs
+                // console.log(outputs);
+                // connect NN to controls
+                if(this.carType != 'TRAFFIC'){
+                    this.controls.forward = outputs[0];
+                    this.controls.left = outputs[1];
+                    this.controls.right = outputs[2];
+                    this.controls.reverse = outputs[3];
+                }
             }
-            // log outputs
-            console.log(outputs);
-            // connect NN to controls
-            if(this.carType != 'TRAFFIC'){
-                this.controls.forward = outputs[0];
-                this.controls.left = outputs[1];
-                this.controls.right = outputs[2];
-                this.controls.reverse = outputs[3];
-             }
         }
     }
     // helper function to process sensor readings in either case
