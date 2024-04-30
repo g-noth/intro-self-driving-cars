@@ -108,7 +108,8 @@ Limitations:
 
 #### Neural Network Visualization
 
-![image](https://github.com/g-noth/intro-self-driving-cars/assets/89991848/78f42e21-4aad-4a11-b42e-17e043d01ab5)
+![nn-guide](https://github.com/g-noth/intro-self-driving-cars/assets/89991848/2fa02df1-d055-4395-8e79-2fe2fb3c7be8)
+
 
 
 ### Configuration Options
