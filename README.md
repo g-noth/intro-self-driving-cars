@@ -8,7 +8,7 @@ With little intervention by the user in assisting / evaluating the models perfor
 - Live visualization of the neural networks signals
 - Configurable settings (neural network structure, traffic, sensors etc.) - See the learning effects yourself
 - Prebuilt connector from a JavaScript frontend to a Python backend using [Axios](#) and [Flask](#)
-- ...
+- Switch between car control types: Keys or different neural networks.
 
 ## Getting Started
 
@@ -40,9 +40,62 @@ Right-click index.html and choose "Open with Live Server" in the directory. Have
 
 ### Frontend
 
+Geometry ...
 
 ### Backend
 
+The architecture of the neural network is defined by the `NeuralNetwork` class, which initializes the network with a specified number of neurons in each layer (output layer always has 4 nodes).
+
+Input data = Sensor readings as an array the length of the ray/sensor count (one offet value per sensor ray)
+- given_inputs[0] = Distance to the closest obstacle detected by the first ray (leftmost)
+- given_inputs[1] = Distance to the closest obstacle detected by the second ray
+- given_inputs[2] = Distance to the closest obstacle detected by the third ray
+- given_inputs[3] = Distance to the closest obstacle detected by the fourth ray
+- given_inputs[n] = Distance to the closest obstacle detected by the fifth ray (rightmost)
+
+Output = Car controls as an array
+ - outputs[0] = Forward 
+ - outputs[1] = Left
+ - outputs[2] = Right
+ - outputs[3] = Reverse
+
+The outputs determine the car's behaviour through an update method in each frame.
+
+We employ a unidirectional / feedforward neural network (no backpropagation because we can not define expected results!).
+
+**How does it learn the path? **
+
+We parallelize and speed up the learning process by intializing `N` amount of `AI` cars with totally random weights and biases.
+
+**Fitness function**: Out of all cars in an epoch, find the bestCar, that reaches the highest point on the screen (lowest y value - see Unit Circle). Hence travelled the longest distance without damage.
+$$bestCar = cars.find(c --> c.y = min(cars.map(c --> c.y)))$$
+
+Where:
+- cars.find is a function that searches for an element in the list of cars.
+- c.y represents the y coordinate of car c
+- min(cars.map(c --> c.y)) calculates the minimum y value among all cars in an epoch
+
+**Evaluation (& Mutation) time! **
+
+If you are happy with the behaviour of that bestCar, save it in LocalStorage. 
+
+In the next generation (epoch) this bestCars' "brain" / set of weights and biases are `mutated` by a specified amount (0 < `a` <= 1). The closer to 0 the more similar the new initalized neural networks are to the current bestCar.
+This is achieved by linear interpolation (lerp) with some random variation. We adjust weights and biases in the next generation by calculating a value that is `amount` of the way from the current bias or weight to the new random value.
+
+$$lerp(A,B,a) = A + (B-A)*a$$
+
+Where:
+- A is the starting value (saved from bestCar)
+- B is the ending value
+- a is the interpolation factor, ranging from 0 to 1, where 0 corresponds to A (biases and weights stay the same) and 1 corresponds to B (completely new random weights and biases)
+
+This is similar approach to the practice in **Reinforcement Learning**!
+- Current state only depends on previous state (see Markow Decision Process (MDP))
+- Exploration and Exploitation Trade-Off
+
+
+Limitations: 
+- The cars can't generalize to new situations, they just memorize their environment (overfit) --> advanced RL problem
 
 ### Configuration Options
 
@@ -77,3 +130,4 @@ This project is adapted from the free JS course on Youtube:
 
 - [YouTube Course](https://www.youtube.com/watch?v=Rs_rAxEsAvI&t=7832s)
 - [GitHub Repository](https://github.com/gniziemazity/Self-driving-car)
+- [Nice RL course for self-driving cars](https://www.youtube.com/watch?v=_q4WUxgwDeg&list=PL05umP7R6ij321zzKXK6XCQXAaaYjQbzr&index=1)
