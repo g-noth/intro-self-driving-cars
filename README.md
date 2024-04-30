@@ -32,7 +32,7 @@ conda create --name intro-self-driving-cars
 conda activate intro-self-driving-cars
 ```
 
-Recommended: Install the VS Code extension "Live Server" to launch a local development server for live visualization.
+Recommended: Install the VS Code extension [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) to launch a local development server for live visualization.
 
 Right-click index.html and choose "Open with Live Server" in the directory. Have fun!
 
@@ -62,32 +62,38 @@ Output = Car controls as an array
 The outputs determine the car's behaviour through an update method in each frame.
 
 We employ a unidirectional / feedforward neural network (no backpropagation because we can not define expected results!).
+- Calculate the weighted sum of the inputs (dot product)
+- Binary step function (1 if weighted sum > bias, 0 otherwise) - sufficient because of no backprop
+- One data point at a time
 
-**How does it learn the path? **
+![image](https://github.com/g-noth/intro-self-driving-cars/assets/89991848/33eb426d-7d2d-4fb5-969d-1513265527e3)
 
-We parallelize and speed up the learning process by intializing `N` amount of `AI` cars with totally random weights and biases.
+
+**How does it learn the path?**
+
+We parallelize and speed up the learning process by intializing `N` amount of `AI` cars with totally random weights and biases. 
 
 **Fitness function**: Out of all cars in an epoch, find the bestCar, that reaches the highest point on the screen (lowest y value - see Unit Circle). Hence travelled the longest distance without damage.
 $$bestCar = cars.find(c \rightarrow c.y = min(cars.map(c \rightarrow c.y)))$$
 
 Where:
-- cars.find is a function that searches for an element in the list of cars.
-- c.y represents the y coordinate of car c
-- min(cars.map(c --> c.y)) calculates the minimum y value among all cars in an epoch
+- $cars.find$ is a function that searches for an element in the list of cars.
+- $c.y$ represents the y coordinate of car c
+- $min(cars.map(c \rightarrow c.y))$ calculates the minimum y value among all cars in an epoch
 
-**Evaluation (& Mutation) time! **
+**Evaluation (& Mutation) time!**
 
 If you are happy with the behaviour of that bestCar, save it in LocalStorage. 
 
 In the next generation (epoch) this bestCars' "brain" / set of weights and biases are `mutated` by a specified amount ($0 < `a` \leq 1$). The closer to 0 the more similar the new initalized neural networks are to the current bestCar.
 
-This is achieved by linear interpolation (lerp) with some random variation. We adjust weights and biases in the next generation by calculating a value that is `amount` of the way from the current bias or weight to the new random value.
+This is achieved by linear interpolation ($lerp$) with some random variation. We adjust weights and biases in the next generation by calculating a value that is `amount` of the way from the current bias or weight to the new random value.
 
 $$lerp(A,B,a) = A + (B-A)*a$$
 
 Where:
 - A is the starting value (saved from bestCar)
-- B is the ending value
+- B is the ending value (upper and lower bounds)
 - a is the interpolation factor, ranging from 0 to 1, where 0 corresponds to A (biases and weights stay the same) and 1 corresponds to B (completely new random weights and biases)
 
 This is similar approach to the practice in **Reinforcement Learning**!
@@ -97,6 +103,7 @@ This is similar approach to the practice in **Reinforcement Learning**!
 
 Limitations: 
 - The cars can't generalize to new situations, they just memorize their environment (overfit) --> advanced RL problem
+- Infinite straight road - the fitness function wouldn't be appropiate if we had curves for example 
 - API requests between frontend and backend limit simulation amount (network traffic)
 
 ### Configuration Options
@@ -110,7 +117,10 @@ Main parameters you can play around with:
 - `rayLength` : length of sensor rays
 - `raySpread` : sensor ray angles spread around the car
 - `traffic` : traffic / obstacle positions
+- `USE_PYTHON_NN` : true = use Python NN, false = use JS NN
+- `DRIVE_MODE` : MAIN = Keyboard, AI = Neural Network
 
+  
 ## Collaboration Instructions
 
 Move to desired project folder and clone the repo:
