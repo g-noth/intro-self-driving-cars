@@ -28,8 +28,8 @@ pip install -r environment.yaml
 
 Using conda:
 ```bash
-conda create --name intro-self-driving-cars
-conda activate intro-self-driving-cars
+conda intro-self-driving-cars-env create -f environment.yaml
+conda activate intro-self-driving-cars-env
 ```
 
 Recommended: Install the VS Code extension [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) to launch a local development server for live visualization.
@@ -105,6 +105,11 @@ Limitations:
 - The cars can't generalize to new situations, they just memorize their environment (overfit) --> advanced RL problem
 - Infinite straight road - the fitness function wouldn't be appropiate if we had curves for example 
 - API requests between frontend and backend limit simulation amount (network traffic)
+
+#### Neural Network Visualization
+
+![image](https://github.com/g-noth/intro-self-driving-cars/assets/89991848/78f42e21-4aad-4a11-b42e-17e043d01ab5)
+
 
 ### Configuration Options
 
