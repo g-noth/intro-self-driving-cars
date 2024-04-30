@@ -40,7 +40,7 @@ Right-click index.html and choose "Open with Live Server" in the directory. Have
 
 ### Frontend
 
-Geometry ...
+@kay
 
 ### Backend
 
@@ -68,7 +68,7 @@ We employ a unidirectional / feedforward neural network (no backpropagation beca
 We parallelize and speed up the learning process by intializing `N` amount of `AI` cars with totally random weights and biases.
 
 **Fitness function**: Out of all cars in an epoch, find the bestCar, that reaches the highest point on the screen (lowest y value - see Unit Circle). Hence travelled the longest distance without damage.
-$$bestCar = cars.find(c --> c.y = min(cars.map(c --> c.y)))$$
+$$bestCar = cars.find(c \rightarrow c.y = min(cars.map(c \rightarrow c.y)))$$
 
 Where:
 - cars.find is a function that searches for an element in the list of cars.
@@ -79,7 +79,8 @@ Where:
 
 If you are happy with the behaviour of that bestCar, save it in LocalStorage. 
 
-In the next generation (epoch) this bestCars' "brain" / set of weights and biases are `mutated` by a specified amount (0 < `a` <= 1). The closer to 0 the more similar the new initalized neural networks are to the current bestCar.
+In the next generation (epoch) this bestCars' "brain" / set of weights and biases are `mutated` by a specified amount ($0 < `a` \leq 1$). The closer to 0 the more similar the new initalized neural networks are to the current bestCar.
+
 This is achieved by linear interpolation (lerp) with some random variation. We adjust weights and biases in the next generation by calculating a value that is `amount` of the way from the current bias or weight to the new random value.
 
 $$lerp(A,B,a) = A + (B-A)*a$$
@@ -96,11 +97,21 @@ This is similar approach to the practice in **Reinforcement Learning**!
 
 Limitations: 
 - The cars can't generalize to new situations, they just memorize their environment (overfit) --> advanced RL problem
+- API requests between frontend and backend limit simulation amount (network traffic)
 
 ### Configuration Options
 
+Main parameters you can play around with: 
 
-## Collaboration
+- `N` : number of AI cars
+- `a` : interpolation (similarity) amount
+- `inputCount` : number of nodes per (hidden) layer and number of layers 
+- `raycount` : number of sensors
+- `rayLength` : length of sensor rays
+- `raySpread` : sensor ray angles spread around the car
+- `traffic` : traffic / obstacle positions
+
+## Collaboration Instructions
 
 Move to desired project folder and clone the repo:
 ```bash
