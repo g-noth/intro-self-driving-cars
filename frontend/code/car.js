@@ -1,5 +1,6 @@
+
 class Car {
-    constructor(x, y, width, height, carType, maxSpeed = 3){
+    constructor(x, y, width, height, carType, maxSpeed = 3, usePythonNN = false){
         this.x = x; //center of the car x
         this.y = y; //center of the car y
         this.width = width;
@@ -13,9 +14,11 @@ class Car {
         this.angle=0;
         this.damaged=false;
 
-        this.useNN = carType == 'AI';
+        this.usePythonNN = usePythonNN;
 
-        if(carType=="AI"){
+        this.useJSNN = carType == 'AI' && !usePythonNN;
+
+        if(this.carType != 'TRAFFIC'){
             this.sensor = new Sensor(this);
             // connect NN to car
             if(this.useJSNN){
@@ -27,10 +30,12 @@ class Car {
             this.img = new Image();
             this.img.src = "car.png"
         }
+
         this.controls = new Controls(carType);
     }
 
-    update(roadBorders, traffic){
+
+    async update(roadBorders, traffic){
         if(!this.damaged){
             this.#drive();
             this.polygon = this.#createPolygon();
@@ -38,21 +43,53 @@ class Car {
         }
         if(this.sensor){
             this.sensor.update(roadBorders, traffic);
-            // console.log(this.sensor.readings);
+
+            // get sensor readings 
             // low values for far away objects, high values for close objects
-            const offsets = this.sensor.readings.map(
-                sensor_reading => sensor_reading == null?0:1-sensor_reading.offset
-            );
-            const outputs = NeuralNetwork.feedForward(offsets, this.nn);
-            // console.log(outputs);
-            // connect NN to controls
-            if(this.useNN){
-                this.controls.forward = outputs[0];
-                this.controls.left = outputs[1];
-                this.controls.right = outputs[2];
-                this.controls.reverse = outputs[3];
+            const offsets = this.processSensorReadings(this.sensor.readings);
+            // console.log(offsets);
+
+            // connect sensor data to NN
+            // post sensor data to flask server and get NN output (controls)
+            let outputs;
+            if(this.usePythonNN){
+                outputs = await this.getPythonNNOutputs(offsets);
+                if(this.carType != 'TRAFFIC'){
+                    this.controls.forward = outputs[0];
+                    this.controls.left = outputs[1];
+                    this.controls.right = outputs[2];
+                    this.controls.reverse = outputs[3];
+                    console.log("Controls",this.controls);
+                 }
+                setTimeout(() =>this.update(roadBorders, traffic), 1000/10);
+            } else {
+                outputs = this.getJSNNOutputs(offsets);
+                // log outputs
+                // console.log(outputs);
+                // connect NN to controls
+                if(this.carType != 'TRAFFIC'){
+                    this.controls.forward = outputs[0];
+                    this.controls.left = outputs[1];
+                    this.controls.right = outputs[2];
+                    this.controls.reverse = outputs[3];
+                }
             }
         }
+    }
+    // helper function to process sensor readings in either case
+    processSensorReadings(readings){
+        return readings.map(
+            sensor_reading => sensor_reading == null?0:1-sensor_reading.offset
+        );
+    }
+    async getPythonNNOutputs(offsets){
+        const response = await axios.post('http://localhost:5001/api/postSensorData',{
+            input_array: offsets
+        });
+        return response.data;
+    }
+    getJSNNOutputs(offsets){
+        return NeuralNetwork.feedForward(offsets, this.nn);
     }
 
     #assessDamage(roadBorders, traffic){
