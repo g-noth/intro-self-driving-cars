@@ -32,9 +32,23 @@ conda create -f environment.yaml
 conda activate intro-self-driving-cars-venv
 ```
 
-Recommended: Install the VS Code extension [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) to launch a local development server for live visualization.
+Start the application:
 
-Right-click index.html and choose "Open with Live Server" in the directory. Have fun!
+1) Start Frontend and Backend manually:
+- Recommended: Install the VS Code extension [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) to launch a local development server for live visualization.
+- Right-click index.html and choose "Open with Live Server" in the directory. Have fun!
+- Go to the backend folder and start the flask server by:
+```bash
+python neural_network.py
+```
+or
+
+2) Start the application with npm start:
+```bash
+cd frontend
+npm i
+npm start
+```
 
 ## How it works
 
