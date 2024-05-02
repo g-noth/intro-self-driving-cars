@@ -43,7 +43,7 @@ python neural_network.py
 ```
 or
 
-2) Start the application with npm start:
+2) Start the entire application (frontend + backend) with npm start:
 ```bash
 cd frontend
 npm i
