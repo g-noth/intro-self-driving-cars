@@ -30,8 +30,8 @@
             <div class="form-group">
                 <label for="driver_moder">Choose a driver mode:</label>
                 <select id="driver_moder" name="driver_moder">
-                    <option value="main">'MAIN'</option>
-                    <option value="ai">'AI'</option>
+                    <option value="ai">AI</option>
+                    <option value="main">MAIN</option>
                 </select>
             </div>
             <button class="start-ride" onclick="setup(event)">Start Animation</button>
@@ -46,12 +46,12 @@
             <canvas id ="networkCanvas"></canvas>
         </div>
         <div id = "verticalButtons">
-            <button title="Save Neural Network" onclick = "save()">📥</button>
-            <button title="Discard Neural Network" onclick = "discard()">🗑️</button>
-            <button title="Stop/Resume Neural Network" id="stopButton" onclick = "stop()">
+            <button id="saveButton" title="Save Neural Network">📥</button>
+            <button id="discardButton" title="Discard Neural Network">🗑️</button>
+            <button id="stopButton" title="Stop/Resume Neural Network" id="stopButton">
                 ⏹️
             </button>
-            <button title="Reload Page to restart animation" onclick= "reload()">🔄</button>
+            <button id="reloadButton" title="Reload Page to restart animation">🔄</button>
         </div>
         <script src="../../backend/network.js"></script>
         <script src="visualizer.js"></script>

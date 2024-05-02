@@ -1,6 +1,6 @@
 
 class Car {
-    constructor(x, y, width, height, carType, maxSpeed = 3, usePythonNN = false){
+    constructor(x, y, width, height, carType, maxSpeed = 3, usePythonNN = false, raysData){
         this.x = x; //center of the car x
         this.y = y; //center of the car y
         this.width = width;
@@ -19,7 +19,7 @@ class Car {
         this.useJSNN = carType == 'AI' && !usePythonNN;
 
         if(this.carType != 'TRAFFIC'){
-            this.sensor = new Sensor(this);
+            this.sensor = new Sensor(this, raysData);
             // connect NN to car
             if(this.useJSNN){
                 this.nn = new NeuralNetwork(
