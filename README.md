@@ -94,6 +94,9 @@ We employ a unidirectional / feedforward neural network (no backpropagation beca
 
 ![image](https://github.com/g-noth/intro-self-driving-cars/assets/89991848/33eb426d-7d2d-4fb5-969d-1513265527e3)
 
+#### Neural Network Visualization
+
+![nn-guide](https://github.com/g-noth/intro-self-driving-cars/assets/89991848/2fa02df1-d055-4395-8e79-2fe2fb3c7be8)
 
 **How does it learn the path?**
 
@@ -132,11 +135,6 @@ Limitations:
 - The cars can't generalize to new situations, they just memorize their environment (overfit) --> advanced RL problem
 - Infinite straight road - the fitness function wouldn't be appropiate if we had curves for example 
 - API requests between frontend and backend limit simulation amount (network traffic)
-
-#### Neural Network Visualization
-
-![nn-guide](https://github.com/g-noth/intro-self-driving-cars/assets/89991848/2fa02df1-d055-4395-8e79-2fe2fb3c7be8)
-
 
 
 ### Configuration Options
