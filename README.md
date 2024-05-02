@@ -114,7 +114,7 @@ Where:
 
 If you are happy with the behaviour of that bestCar, save it in LocalStorage. 
 
-In the next generation (epoch) this bestCars' "brain" / set of weights and biases are `mutated` by a specified amount ($0 < `a` \leq 1$). The closer to 0 the more similar the new initalized neural networks are to the current bestCar.
+In the next generation (epoch) this bestCars' "brain" / set of weights and biases are `mutated` by a specified amount ($0 < a \leq 1$). The closer to 0 the more similar the new initalized neural networks are to the current bestCar.
 
 This is achieved by linear interpolation ($lerp$) with some random variation. We adjust weights and biases in the next generation by calculating a value that is amount `a` of the way from the current bias or weight to the new random value.
 
