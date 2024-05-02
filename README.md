@@ -40,7 +40,19 @@ Right-click index.html and choose "Open with Live Server" in the directory. Have
 
 ### Frontend
 
-@kay
+The canvas element is used to create 2d animations (the canvas element is a container to draw graphics with JavaScript). Learn more: https://www.w3schools.com/html/html5_canvas.asp 
+
+![Screenshot 2024-05-02 at 12 02 40](https://github.com/g-noth/intro-self-driving-cars/assets/110245151/736d544b-d738-40ff-817b-e922653228f0)
+
+Car.js is required to build/draw each car. The rotated Unit circle is used to move the car smoothly (not just jump from lane to lane)
+
+Control.js is used to control the car either manually or via the Neural network outputs (left,right, forward, back)
+
+Road.js creates the road and it draws the borders respectively to detect if the car crashes against the border (Hint: the main car is not really moving, just everything else)
+
+Sensor.js defines rayCasts and the intersection helper function in utils.js returns the offset
+
+Class main.js initializes everything
 
 ### Backend
 
