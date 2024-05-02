@@ -4,7 +4,9 @@
   "description": "",
   "main": "main.js",
   "scripts": {
-    "start": "node openBrowser.js",
+    "start:frontend": "node openBrowser.js",
+    "start:backend": "cd ../backend && python neural_network.py",
+    "start": "npm run start:backend & npm run start:frontend",
     "lint": "eslint . --fix"
   },
   "keywords": [],
