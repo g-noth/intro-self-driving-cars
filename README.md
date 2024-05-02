@@ -28,8 +28,8 @@ pip install -r environment.yaml
 
 Using conda:
 ```bash
-conda intro-self-driving-cars-env create -f environment.yaml
-conda activate intro-self-driving-cars-env
+conda create -f environment.yaml
+conda activate intro-self-driving-cars-venv
 ```
 
 Recommended: Install the VS Code extension [Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer) to launch a local development server for live visualization.
@@ -78,7 +78,7 @@ $$bestCar = cars.find(c \rightarrow c.y = min(cars.map(c \rightarrow c.y)))$$
 
 Where:
 - $cars.find$ is a function that searches for an element in the list of cars.
-- $c.y$ represents the y coordinate of car c
+- $c.y$ represents the y coordinate of car $c$
 - $min(cars.map(c \rightarrow c.y))$ calculates the minimum y value among all cars in an epoch
 
 **Evaluation (& Mutation) time!**
@@ -87,18 +87,19 @@ If you are happy with the behaviour of that bestCar, save it in LocalStorage.
 
 In the next generation (epoch) this bestCars' "brain" / set of weights and biases are `mutated` by a specified amount ($0 < `a` \leq 1$). The closer to 0 the more similar the new initalized neural networks are to the current bestCar.
 
-This is achieved by linear interpolation ($lerp$) with some random variation. We adjust weights and biases in the next generation by calculating a value that is `amount` of the way from the current bias or weight to the new random value.
+This is achieved by linear interpolation ($lerp$) with some random variation. We adjust weights and biases in the next generation by calculating a value that is amount `a` of the way from the current bias or weight to the new random value.
 
 $$lerp(A,B,a) = A + (B-A)*a$$
 
 Where:
-- A is the starting value (saved from bestCar)
-- B is the ending value (upper and lower bounds)
-- a is the interpolation factor, ranging from 0 to 1, where 0 corresponds to A (biases and weights stay the same) and 1 corresponds to B (completely new random weights and biases)
+- $A$ is the starting value (current value saved in bestCar)
+- $B$ is the ending value (upper and lower bounds 1 and -1)
+- $a$ is the interpolation factor, ranging from 0 to 1, where 0 corresponds to A (biases and weights stay the same) and 1 corresponds to B (completely new random weights and biases)
 
 This is similar approach to the practice in **Reinforcement Learning**!
 - Current state only depends on previous state (see Markow Decision Process (MDP))
 - Exploration and Exploitation Trade-Off
+- Reinforce actions that receive more reward
 
 
 Limitations: 
@@ -125,6 +126,11 @@ Main parameters you can play around with:
 - `traffic` : traffic / obstacle positions
 - `USE_PYTHON_NN` : true = use Python NN, false = use JS NN
 - `DRIVE_MODE` : MAIN = Keyboard, AI = Neural Network
+
+
+## Further advancements
+
+@saam
 
   
 ## Collaboration Instructions
@@ -158,3 +164,4 @@ This project is adapted from the free JS course on Youtube:
 - [YouTube Course](https://www.youtube.com/watch?v=Rs_rAxEsAvI&t=7832s)
 - [GitHub Repository](https://github.com/gniziemazity/Self-driving-car)
 - [Nice RL course for self-driving cars](https://www.youtube.com/watch?v=_q4WUxgwDeg&list=PL05umP7R6ij321zzKXK6XCQXAaaYjQbzr&index=1)
+- [3D Trackmania RL application](https://www.youtube.com/watch?v=Dw3BZ6O_8LY&t=653s)
