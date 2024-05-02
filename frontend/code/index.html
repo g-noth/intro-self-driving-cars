@@ -12,8 +12,8 @@
                 <input type="number" id="lanes" min="1" max="10" step="1" value="3">
             </div>
             <div class="form-group">
-                <label for="traffic">Number of Cars (Traffic)</label>
-                <input type="number" id="traffic" min="10" max="100" step="10" value="50">
+                <label for="sim-cars">Number of AI simulated cars</label>
+                <input type="number" id="sim-cars" min="10" max="1000" step="10" value="200">
             </div>
             <div class="form-group">
                 <label for="rays">Number of Rays</label>
@@ -34,14 +34,12 @@
                     <option value="main">MAIN</option>
                 </select>
             </div>
-            <button class="start-ride" onclick="setup(event)">Start Animation</button>
+            <button class="start-ride" onclick="setup(event)">Setup Animation</button>
         </form>
         <canvas id="myCanvas"></canvas>
         <div class="networkTabs">
             <div class="tab">
                 <button class="nn1">NN1</button>
-                <button class="nn2">NN2</button>
-                <button class="nn3">NN3</button>
             </div>
             <canvas id ="networkCanvas"></canvas>
         </div>

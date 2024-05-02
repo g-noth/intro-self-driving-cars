@@ -22,6 +22,10 @@ class Road {
     ];
   }
 
+  getPositionCar(laneCount){
+    return this.getLaneCenter(Math.floor(Math.random() * laneCount));
+  }
+
   getLaneCenter(laneIndex) {
     const laneWidth = this.width / this.laneCount;
     return this.left + laneWidth / 2

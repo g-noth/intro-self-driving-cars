@@ -26,9 +26,6 @@ class Car {
                     [this.sensor.rayCount,8,4]
                 );
             }
-
-            this.img = new Image();
-            this.img.src = "car.png"
         }
 
         this.controls = new Controls(carType);
@@ -47,11 +44,14 @@ class Car {
             // get sensor readings 
             // low values for far away objects, high values for close objects
             const offsets = this.processSensorReadings(this.sensor.readings);
-            // console.log(offsets);
 
             // connect sensor data to NN
             // post sensor data to flask server and get NN output (controls)
             let outputs;
+
+            if(this.carType == 'MAIN'){
+                return
+            }
             if(this.usePythonNN){
                 outputs = await this.getPythonNNOutputs(offsets);
                 if(this.carType != 'TRAFFIC'){
@@ -64,9 +64,6 @@ class Car {
                 setTimeout(() =>this.update(roadBorders, traffic), 1000/10);
             } else {
                 outputs = this.getJSNNOutputs(offsets);
-                // log outputs
-                // console.log(outputs);
-                // connect NN to controls
                 if(this.carType != 'TRAFFIC'){
                     this.controls.forward = outputs[0];
                     this.controls.left = outputs[1];
@@ -195,28 +192,14 @@ class Car {
             ctx.fillStyle=color;
         }
 
-        if(this.carType == 'TRAFFIC'){
-            // draw traffic cars
-            ctx.beginPath();
-            ctx.moveTo(this.polygon[0].x, this.polygon[0].y)
-            for(let i=1; i<this.polygon.length; i++){
-                ctx.lineTo(this.polygon[i].x, this.polygon[i].y)
-            }
-            ctx.fill();
-        } else {
-            //draw car
-            ctx.save();
-            ctx.translate(this.x, this.y);
-            ctx.rotate(-this.angle);
-            ctx.drawImage(
-                this.img, 
-                -this.width/2, 
-                -this.height/2,
-                this.width,
-                this.height
-                );
-            ctx.restore();
+        // draw traffic cars
+        ctx.beginPath();
+        ctx.moveTo(this.polygon[0].x, this.polygon[0].y)
+        for(let i=1; i<this.polygon.length; i++){
+            ctx.lineTo(this.polygon[i].x, this.polygon[i].y)
         }
+        ctx.fill();
+
 
         if(this.sensor && drawSensor){
             this.sensor.draw(ctx);
