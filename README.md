@@ -96,6 +96,9 @@ We employ a unidirectional / feedforward neural network (no backpropagation beca
 
 ![image](https://github.com/g-noth/intro-self-driving-cars/assets/89991848/33eb426d-7d2d-4fb5-969d-1513265527e3)
 
+#### Neural Network Visualization
+
+![nn-guide](https://github.com/g-noth/intro-self-driving-cars/assets/89991848/2fa02df1-d055-4395-8e79-2fe2fb3c7be8)
 
 **How does it learn the path?**
 
@@ -114,7 +117,7 @@ Where:
 
 If you are happy with the behaviour of that bestCar, save it in LocalStorage. 
 
-In the next generation (epoch) this bestCars' "brain" / set of weights and biases are `mutated` by a specified amount ($0 < `a` \leq 1$). The closer to 0 the more similar the new initalized neural networks are to the current bestCar.
+In the next generation (epoch) this bestCars' "brain" / set of weights and biases are `mutated` by a specified amount ($0 < a \leq 1$). The closer to 0 the more similar the new initalized neural networks are to the current bestCar.
 
 This is achieved by linear interpolation ($lerp$) with some random variation. We adjust weights and biases in the next generation by calculating a value that is amount `a` of the way from the current bias or weight to the new random value.
 
@@ -135,11 +138,6 @@ Limitations:
 - The cars can't generalize to new situations, they just memorize their environment (overfit) --> advanced RL problem
 - Infinite straight road - the fitness function wouldn't be appropiate if we had curves for example 
 - API requests between frontend and backend limit simulation amount (network traffic)
-
-#### Neural Network Visualization
-
-![nn-guide](https://github.com/g-noth/intro-self-driving-cars/assets/89991848/2fa02df1-d055-4395-8e79-2fe2fb3c7be8)
-
 
 
 ### Configuration Options
