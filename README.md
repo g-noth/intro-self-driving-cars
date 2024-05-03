@@ -155,59 +155,10 @@ Main parameters you can play around with:
 - `USE_PYTHON_NN` : true = use Python NN, false = use JS NN
 - `DRIVE_MODE` : MAIN = Keyboard, AI = Neural Network
 
-# RL (Q-Learning)
-- Bellmann Optimality Principle to Q-Learning
-- Key paper (30k citations): https://www.nature.com/articles/nature14236
-- suitable for small amount of states
-- Objective: Drive as long as possible without crashing
 
-## **Markow Decision Process (MDP)** (S,A,R,P,$\gamma$)
+## RL research for further improvements
 
-![image-2.png](attachment:image-2.png)
-
-Current state only depends on previous state. If previous state is given, all previous states (history) before that are ignored. "The future is independent of the past given the present"
-
-- State space (S): 
-    - A policy ($\pi$) is a function from S to A that specifies what action to take in each state (Neural Network learns the policy through trial-and-error)
-- Action space (A): Forward, Left, Right, Reverse
-- Agent maximize reward (R) --> Select actions to maximize expected total future reward
-    - Reward: + if car did not crash at time t
-    - $R(r_t|s_t, a_t)$: distribution/function of current reward given (state, action) pair
-- P how environment transitions to next state
-    - $P(s_{t+1}|s_t, a_t)$: distribution over next state given (state, action) pair
-- Discount factor ($\gamma$): Determines value of future rewards
-- NN takes states as input --> NN has multiple outputs (left, right etc.)
-
-RL has two tasks (trade-off):
-
-1. Exploration: Try a new action a in state s, observe reward r
-    - discover more information about the environment, but sacrifice total reward
-2. Exploitation: Use a previously discovered good action a (to an extent)
-    - exploit known information to maximize reward, but sacrifice unexplored areas
-
-How? --> $\epsilon$ greedy exploration algorithm: Best action which was discovered so far
-- try all possible a with non-zero probability
-- with prob $\epsilon$ choose an a at random (exploration)
-- with prob $1-\epsilon$ choose the best action (exploitation)
-- $\epsilon$ is large initially and gradually reduced over time (exploration to exploitation)
-
-
-## Bellman Optimality Equation and Q-Learning
-
-Bellman optimality:
-
-
-![image-3.png](attachment:image-3.png)
-
-
-
-Q-learning:
-
-![alt text](image-1.png)
-
-Literature:
-- https://spinningup.openai.com/en/latest/spinningup/rl_intro.html
-- Nice course for self-driving cars: https://www.youtube.com/watch?v=_q4WUxgwDeg&list=PL05umP7R6ij321zzKXK6XCQXAaaYjQbzr&index=1
+Refer to [Reinforcement Learning Research Overview](https://github.com/g-noth/intro-self-driving-cars/blob/main/notebooks/rl-test.ipynb)
 
   
 ## Collaboration Instructions
