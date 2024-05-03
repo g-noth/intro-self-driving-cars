@@ -207,7 +207,7 @@ Bellman optimality:
 
 Q-learning:
 
-![image.png](attachment:image.png)
+![alt text](image-1.png)
 
 Literature:
 - https://spinningup.openai.com/en/latest/spinningup/rl_intro.html
