@@ -155,11 +155,6 @@ Main parameters you can play around with:
 - `USE_PYTHON_NN` : true = use Python NN, false = use JS NN
 - `DRIVE_MODE` : MAIN = Keyboard, AI = Neural Network
 
-
-## Further advancements
-
-@saam
-
 # RL (Q-Learning)
 - Bellmann Optimality Principle to Q-Learning
 - Key paper (30k citations): https://www.nature.com/articles/nature14236
