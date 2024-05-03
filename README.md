@@ -1,6 +1,6 @@
 # Introduction into self-driving cars
 
-This project is an introduction into self-driving cars developed in JavaScript, featuring some Python backend components. Its purpose is to demonstrate how simple feedforward neural networks can autonomously navigate an obstacle course without sustaining damage.
+This project is an introduction into self-driving cars developed in JavaScript. Its purpose is to demonstrate how simple feedforward neural networks can autonomously navigate an obstacle course without sustaining damage.
 With little intervention by the user in assisting / evaluating the models performance, it is able to learn rapidly and thereby gives you a first understanding into the topic of Reinforcement Learning.
 
 ![alt text](image.png)
@@ -10,7 +10,7 @@ With little intervention by the user in assisting / evaluating the models perfor
 - Live visualization of the neural networks signals
 - Configurable settings (neural network structure, traffic, sensors etc.) - See the learning effects yourself
 - Switch between car control types: Keys or different neural networks.
-- Prebuilt connector from a JavaScript frontend to a Python backend using [Axios](#) and [Flask](#) (WIP)
+- Prebuilt connector from a JavaScript frontend to a Python backend using [Axios](#) and [Flask](#) (WIP) - Currently on feature branch "feature/pybackend". Unstable because of API requests limiations (inferiror performance atm).
 
 ## Getting Started
 
@@ -137,7 +137,8 @@ This is similar approach to the practice in **Reinforcement Learning**!
 Limitations: 
 - The cars can't generalize to new situations, they just memorize their environment (overfit) --> advanced RL problem
 - Infinite straight road - the fitness function wouldn't be appropiate if we had curves for example 
-- API requests between frontend and backend limit simulation amount (network traffic)
+- API requests between frontend and backend limit simulation amount (network traffic) --> only use JS network
+- Some bugs for the input fields (WIP)
 
 
 ### Configuration Options
@@ -173,7 +174,7 @@ Current state only depends on previous state. If previous state is given, all pr
 
 - State space (S): 
     - A policy ($\pi$) is a function from S to A that specifies what action to take in each state (Neural Network learns the policy through trial-and-error)
-- Action space (A): 
+- Action space (A): Forward, Left, Right, Reverse
 - Agent maximize reward (R) --> Select actions to maximize expected total future reward
     - Reward: + if car did not crash at time t
     - $R(r_t|s_t, a_t)$: distribution/function of current reward given (state, action) pair
@@ -240,7 +241,7 @@ Next, open a pull request.
 
 ## Sources:
 
-This project is adapted from the free JS course on Youtube: 
+This project is adapted from the free JS course on Youtube (1st link): 
 
 - [YouTube Course](https://www.youtube.com/watch?v=Rs_rAxEsAvI&t=7832s)
 - [GitHub Repository](https://github.com/gniziemazity/Self-driving-car)
