@@ -3,12 +3,14 @@
 This project is an introduction into self-driving cars developed in JavaScript, featuring some Python backend components. Its purpose is to demonstrate how simple feedforward neural networks can autonomously navigate an obstacle course without sustaining damage.
 With little intervention by the user in assisting / evaluating the models performance, it is able to learn rapidly and thereby gives you a first understanding into the topic of Reinforcement Learning.
 
+![alt text](image.png)
+
 ## Features
 - Interactive web-based application to play and learning
 - Live visualization of the neural networks signals
 - Configurable settings (neural network structure, traffic, sensors etc.) - See the learning effects yourself
-- Prebuilt connector from a JavaScript frontend to a Python backend using [Axios](#) and [Flask](#)
 - Switch between car control types: Keys or different neural networks.
+- Prebuilt connector from a JavaScript frontend to a Python backend using [Axios](#) and [Flask](#) (WIP)
 
 ## Getting Started
 
@@ -87,7 +89,7 @@ Output = Car controls as an array
 
 The outputs determine the car's behaviour through an update method in each frame.
 
-We employ a unidirectional / feedforward neural network (no backpropagation because we can not define expected results!).
+We employ a unidirectional / feedforward neural network (no backpropagation because we can not define expected results!) at this time.
 - Calculate the weighted sum of the inputs (dot product)
 - Binary step function (1 if weighted sum > bias, 0 otherwise) - sufficient because of no backprop
 - One data point at a time
@@ -100,6 +102,7 @@ We employ a unidirectional / feedforward neural network (no backpropagation beca
 We parallelize and speed up the learning process by intializing `N` amount of `AI` cars with totally random weights and biases. 
 
 **Fitness function**: Out of all cars in an epoch, find the bestCar, that reaches the highest point on the screen (lowest y value - see Unit Circle). Hence travelled the longest distance without damage.
+
 $$bestCar = cars.find(c \rightarrow c.y = min(cars.map(c \rightarrow c.y)))$$
 
 Where:

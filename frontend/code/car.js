@@ -23,7 +23,7 @@ class Car {
             // connect NN to car
             if(this.useJSNN){
                 this.nn = new NeuralNetwork(
-                    [this.sensor.rayCount,8,4]
+                    [this.sensor.rayCount,6,4]
                 );
             }
         }

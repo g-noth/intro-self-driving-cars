@@ -8,16 +8,19 @@ const networkCanvas = document.getElementById('networkCanvas');
 networkCanvas.width = 400;
 networkCanvas.height = window.innerHeight;
 const networkCtx = networkCanvas.getContext('2d');
+// setup menu
+const laneCount = 3;
+const laneIndex = 1;
+
+const road = new Road(canvas.width / 2, canvas.width * 0.9);
 
 let isStopped = false;
 let animationFrame;
-
+// rayCount,raySpread,rayLength
 
 function setup(e){
-  e.preventDefault();
-
+  if (e) e.preventDefault();
   // get form input values
-  const laneCount = document.getElementById('lanes').value;
   const simAiCars = document.getElementById('sim-cars').value;
   const raysData = [
     document.getElementById('rays').value,
@@ -25,12 +28,9 @@ function setup(e){
     document.getElementById('length-rays').value
   ];
   const driveMode = document.getElementById('driver_moder').value;
-
-  const road = new Road(canvas.width / 2, canvas.width * 0.9, laneCount);
   const DRIVE_MODE = driveMode.toUpperCase(); // 'MAIN' = Keyboard, 'AI' = Neural Network
   let USE_PYTHON_NN = false;  // true = use Python NN, false = use JS NN
   const cars = generateCars(simAiCars);  
-
   // initialize best car as first car of cohort
   let bestCar = cars[0];
 
@@ -45,14 +45,16 @@ function setup(e){
   }
 
   const traffic = [
-    new Car(road.getPositionCar(laneCount), -100, 30, 50, 'TRAFFIC',2),
-    new Car(road.getPositionCar(laneCount), -400, 30, 100, 'TRAFFIC',2),
-    new Car(road.getPositionCar(laneCount), -400, 30, 50, 'TRAFFIC',2),
-    new Car(road.getPositionCar(laneCount), -600, 30, 100, 'TRAFFIC',2),
-    new Car(road.getPositionCar(laneCount), -600, 30, 100, 'TRAFFIC',2),
-    new Car(road.getPositionCar(laneCount), -800, 30, 50, 'TRAFFIC',2),
-    new Car(road.getPositionCar(laneCount), -800, 30, 50, 'TRAFFIC',2),
-    new Car(road.getPositionCar(laneCount), -900, 30, 50, 'TRAFFIC',2),
+    new Car(road.getLaneCenter(1), -100, 30, 50, 'TRAFFIC',2),
+    new Car(road.getLaneCenter(2), -400, 30, 100, 'TRAFFIC',2),
+    new Car(road.getLaneCenter(0), -400, 30, 50, 'TRAFFIC',2),
+    new Car(road.getLaneCenter(1), -600, 30, 100, 'TRAFFIC',2),
+    new Car(road.getLaneCenter(2), -600, 30, 100, 'TRAFFIC',2),
+    new Car(road.getLaneCenter(0), -800, 30, 50, 'TRAFFIC',2),
+    new Car(road.getLaneCenter(2), -800, 30, 50, 'TRAFFIC',2),
+    new Car(road.getLaneCenter(0), -1000, 30, 50, 'TRAFFIC',2),
+    new Car(road.getLaneCenter(1), -1000, 30, 50, 'TRAFFIC',2),
+    new Car(road.getLaneCenter(2), -1200, 30, 50, 'TRAFFIC',2),
   ];
 
   document.getElementById('saveButton').addEventListener('click', save);
@@ -85,14 +87,13 @@ function setup(e){
   }
 
   function reload(){
-    console.log("hello")
     window.location.reload();
   }
 
   function generateCars(N){
     const cars = [];
     for(let i=1;i<N;i++){
-        cars.push(new Car(road.getLaneCenter(Math.ceil(laneCount/2)-1), 100, 30, 50, DRIVE_MODE,3, USE_PYTHON_NN, raysData));
+        cars.push(new Car(road.getLaneCenter(1), 100, 30, 50, DRIVE_MODE,3, USE_PYTHON_NN, raysData));
     }
     return cars;
   }
@@ -154,3 +155,4 @@ function setup(e){
     requestAnimationFrame(animate);
   }
 }
+document.addEventListener('DOMContentLoaded', setup);
